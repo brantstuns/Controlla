@@ -6,6 +6,7 @@ const nodemon = require('nodemon');
 const webpack = require('webpack-stream');
 const jasmine = require('gulp-jasmine');
 const TerminalReporter = require('jasmine-terminal-reporter');
+const path = require('path');
 
 
 gulp.task('lintIt', function () {
@@ -24,6 +25,7 @@ gulp.task('webpack', function () {
 
 gulp.task('runIt', function () {
   process.env.PORT = 1111;
+  process.env.CREDS = process.argv[4];
   nodemon({
     exec: './node_modules/babel-cli/bin/babel-node.js',
     script: './server/runIt.js',
@@ -56,6 +58,7 @@ const terminalReporter = new TerminalReporter({
 
 gulp.task('specs', function () {
   process.env.NODE_ENV = 'test';
+  process.env.CREDS = path.join(__dirname, 'specs/server/middlewares/testCreds.json');
   return gulp.src('specs/server/**/*Spec.js')
     .pipe(jasmine({reporter: terminalReporter}));
 });
